@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -34,6 +35,7 @@ func (app *Config) readJSON(w http.ResponseWriter, r *http.Request, data any) er
 func (app *Config) writeJSON(w http.ResponseWriter, data any, status int, headers ...http.Header) error {
 	out, err := json.Marshal(data)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -48,6 +50,7 @@ func (app *Config) writeJSON(w http.ResponseWriter, data any, status int, header
 
 	_, err = w.Write(out)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil

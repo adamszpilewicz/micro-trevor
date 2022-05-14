@@ -5,6 +5,7 @@ import (
 	"github.com/vanng822/go-premailer/premailer"
 	mail "github.com/xhit/go-simple-mail/v2"
 	"html/template"
+	"log"
 	"time"
 )
 
@@ -88,14 +89,16 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 }
 
 func (m *Mail) buildHTMLessage(msg Message) (string, error) {
-	templateToRender := "./templates/mail.html.gothml"
+	templateToRender := "./templates/mail.html.gohtml"
 	t, err := template.New("email-tmpl").ParseFiles(templateToRender)
 	if err != nil {
+		log.Println("---> buildHTMLessage: ", err)
 		return "", err
 	}
 
 	var tpl bytes.Buffer
 	if err := t.ExecuteTemplate(&tpl, "body", msg.DataMap); err != nil {
+		log.Println("---> ExecuteTemplate: ", err)
 		return "", err
 	}
 
@@ -109,7 +112,7 @@ func (m *Mail) buildHTMLessage(msg Message) (string, error) {
 }
 
 func (m *Mail) buildPlainTextMessage(msg Message) (string, error) {
-	templateToRender := "./templates/mail.text.gothml"
+	templateToRender := "./templates/mail.text.gohtml"
 	t, err := template.New("email-plain").ParseFiles(templateToRender)
 	if err != nil {
 		return "", err
